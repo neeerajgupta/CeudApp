@@ -1,0 +1,104 @@
+package intern;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Item {
+    private int id;
+    private String name;
+
+    public Item(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+class CrudApp {
+    private List<Item> items;
+    private int nextId;
+
+    public CrudApp() {
+        items = new ArrayList<>();
+        nextId = 1;
+    }
+
+    public void createItem(String name) {
+        Item newItem = new Item(nextId, name);
+        items.add(newItem);
+        nextId++;
+    }
+
+    public List<Item> readItems() {
+        return items;
+    }
+
+    public void updateItem(int id, String newName) {
+        for (Item item : items) {
+            if (item.getId() == id) {
+                item.setName(newName);
+                break;
+            }
+        }
+    }
+
+    public void deleteItem(int id) {
+        items.removeIf(item -> item.getId() == id);
+    }
+
+    public static void main(String[] args) {
+        CrudApp app = new CrudApp();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("1. Create   2. Read   3. Update   4. Delete   5. Exit");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter item name: ");
+                    scanner.nextLine();
+                    String itemName = scanner.nextLine();
+                    app.createItem(itemName);
+                    break;
+                case 2:
+                    List<Item> items = app.readItems();
+                    for (Item item : items) {
+                        System.out.println("ID: " + item.getId() + ", Name: " + item.getName());
+                    }
+                    break;
+                case 3:
+                    System.out.print("Enter item ID to update: ");
+                    int updateId = scanner.nextInt();
+                    System.out.print("Enter new item name: ");
+                    scanner.nextLine();
+                    String newItemName = scanner.nextLine();
+                    app.updateItem(updateId, newItemName);
+                    break;
+                case 4:
+                    System.out.print("Enter item ID to delete: ");
+                    int deleteId = scanner.nextInt();
+                    app.deleteItem(deleteId);
+                    break;
+                case 5:
+                    System.out.println("Exiting the application.");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please enter a valid option.");
+            }
+        }
+    }
+}
+
